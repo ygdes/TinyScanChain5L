@@ -47,7 +47,7 @@ The pins are :
 
 * SC_DOUT is the serial data output
 
-* SC_GET is a control signal that transfer external data, in parallel, into the scan chain (if the cell allows it)
+* SC_GET is a control signal that transfers external data, in parallel, into the scan chain (if the cell allows it)
 
 * SC_SET is a control signal that transfers the scan chain's value into the auxiliary latch for longer-term storage.
 
