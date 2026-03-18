@@ -21,4 +21,4 @@ The iHP SG13G2 PDK provides A221OI and A21OI gates which solve this problem. It'
 
 ## What next?
 
-Let's hope it makes it in time to tapeout !
+Let's hope it makes it in time to tapeout ! I'll create a suitable FSM later.
