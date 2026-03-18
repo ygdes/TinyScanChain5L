@@ -2,7 +2,9 @@
 
 # Welcome to the TinyScanChain
 
-- [Read the documentation for this project](docs/info.md)
+Let's try some new ideas in real silicon, so I can restart the project [DTAP - Debug and Test Access Port](https://hackaday.io/project/193122-dtap-debug-and-test-access-port)
+
+[Read the documentation for this project](docs/info.md)
 
 ## What is this Tiny Tapeout tile ?
 
