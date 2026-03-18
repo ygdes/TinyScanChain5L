@@ -46,8 +46,8 @@ pinout:
   # Bidirectional pins
   uio[0]: "SC_RESET"
   uio[1]: "SC_CLK"
-  uio[2]: "SC_STORE"
-  uio[3]: "SC_LOAD"
+  uio[2]: "SC_GET"
+  uio[3]: "SC_SET"
   uio[4]: "SC_DIN"
   uio[5]: "SC_DOUT"
   uio[6]: ""
