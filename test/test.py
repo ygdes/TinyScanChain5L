@@ -47,7 +47,7 @@ Count_Enable = 128
 
 
 
-async def pulse8(bytes, flags):
+async def pulse8(dut, bytes, flags):
   j = 0
   while (j < bytes):
     j = j+1
@@ -103,7 +103,8 @@ async def test_project(dut):
   dut.uio_in.value = SC_RESET
   await ClockCycles(dut.clk, 1)
 
-  await pulse8(4, SC_RESET + SC_DIN)
+  # Flush the chain. Fed with 1, should output 1s after 24 cycles
+  await pulse8(dut, 4, SC_RESET + SC_DIN)
 
 
 
