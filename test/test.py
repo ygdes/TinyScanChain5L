@@ -45,19 +45,20 @@ SC_DOUT      =  32
 DO8          =  64
 Count_Enable = 128
 
+async def pulse(dut, flags, pin):
+  dut.uio_in.value = flags + pin 
+  await ClockCycles(dut.clk, 1)
+  dut.uio_in.value = flags
+  await ClockCycles(dut.clk, 1)
 
-
-async def pulse8(dut, bytes, flags):
+async def pulse8x(dut, bytes, flags):
   j = 0
   while (j < bytes):
     j = j+1
     i = 0
     while (i < 8):   # a whole byte for SPI, just one bit for the shift register
       i = i+1
-      dut.uio_in.value = flags + SC_CLK
-      await ClockCycles(dut.clk, 1)
-      dut.uio_in.value = flags
-      await ClockCycles(dut.clk, 1)
+      await  pulse(dut, flags, SC_CLK)
 
 
 
@@ -82,48 +83,50 @@ async def test_project(dut):
   dut._log.info("Let's see if the LFSR works.")
   await ClockCycles(dut.clk, 50)
 
+
   dut.uio_in.value = SC_SET + SC_DIN
   dut._log.info("LFSR stopped. Does the input value cascade to the output during RESET ?")
   await ClockCycles(dut.clk, 1)
-  print("dut.uio_out.value = " + str(dut.uio_out.value))
+  #print("dut.uio_out.value = " + str(dut.uio_out.value))
   assert dut.uio_out.value == SC_DOUT + DO8
+  assert dut.uo_out.value == 255
 
+  
   dut.uio_in.value = SC_SET  # restore the cleared value at the output port)
   await ClockCycles(dut.clk, 1)
-  print("dut.uio_out.value = " + str(dut.uio_out.value))
+  #print("dut.uio_out.value = " + str(dut.uio_out.value))
   assert dut.uio_out.value == 0
+  assert dut.uo_out.value == 0
+
 
   dut._log.info("Does the scan chain capture the input data ?")
-  dut.uio_in.value = SC_RESET + SC_GET
   dut.ui_in.value = 109 # 01101101
-  await ClockCycles(dut.clk, 1)
+  await pulse(dut, SC_RESET, SC_GET)
   # sc_dout should be 1 right ?
 
   dut._log.info("Dumping the scan chain")
-  dut.uio_in.value = SC_RESET
-  await ClockCycles(dut.clk, 1)
-
   # Flush the chain. Fed with 1, should output 1s after 24*8 cycles
-  await pulse8(dut, 4*8, SC_RESET + SC_DIN)
+  await pulse8x(dut, 4*8, SC_RESET + SC_DIN)
+
 
   # fill the output port with 1s
-  dut.uio_in.value = SC_RESET + SC_SET 
-  await ClockCycles(dut.clk, 1)
-  dut.uio_in.value = SC_RESET
-  await ClockCycles(dut.clk, 1)
+  await pulse(dut, SC_RESET, SC_SET)
 
-  await pulse8(dut, 4*8, SC_RESET)
-  dut.uio_in.value = SC_RESET + SC_SET 
-  await ClockCycles(dut.clk, 1)
+  # see if it works better now ?
+  await pulse(dut, SC_RESET, SC_GET)
 
 
+  await pulse8x(dut, 4*8, SC_RESET)
+
+
+  # fill the output port with 0s
+  await pulse(dut, SC_RESET, SC_SET)
+
+  #dut.uio_in.value = SC_RESET + SC_SET 
+  #await ClockCycles(dut.clk, 1)
   #dut.uio_in.value = Count_Enable + SC_GET
   #await ClockCycles(dut.clk, 1)
-
   # Set the input values you want to test
   #dut.ui_in.value = 20
   #dut.uio_in.value = 30
-
-  # Wait for one clock cycle to see the output values
-
   # assert dut.uo_out.value == 50
