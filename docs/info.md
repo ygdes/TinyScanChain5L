@@ -29,9 +29,15 @@ First look at the projects above. Refresher:
 
 In this TAP system we don't need the sophisticated demux-mux machinery that splits and merges the full-speed bitstream. Let's keep a rate of one bit per byte (think: SPI!) and a single chain (so far), let's KISS because size matters.
 
-Then take one RSFF made from a couple of sg13g2_a21o_1 (area: 2×12.7) and add some features such as a second FF or another data input.
+Then take one RSFF made from a couple of sg13g2_a21o_1 (area: 18.2) and add some features such as a second FF or another data input.
 
 ![](ScanChainCells.png)
+
+By comparison:
+
+- sg13g2_dlhq_1 : area=30.84480
+
+- sg13g2_dfrbpq_1 : area=48.98880
 
 Note: The scan chain has a granularity of 4 steps but only 3 actual data bits. Clock pulses should always be in bursts of 8, each burst provides one bit, so the bits are grouped by 3. This implies that each transaction will certainly consist of sequences of 3 bytes over SPI.
 
@@ -56,6 +62,8 @@ The pins are :
 * DI0 to DI7 are extra input pins that are read into the scan chain during a strobe on SC_GET
 
 * Count_Enable lets an internal free-running counter count. It is read by the scan chain during a strobe on SC_GET so it must be "frozen" to be sampled.
+
+Pro tip : the GET strobe only sets bits in the scan chain. So you have to strobe RESET low first.
 
 ## Structure of the scan chain :
 
