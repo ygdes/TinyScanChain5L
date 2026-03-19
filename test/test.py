@@ -147,9 +147,11 @@ async def test_project(dut):
   await pulse8x(dut, 4*8, SC_RESET)
 
   dut.ui_in.value = 0
+  n = 1
   for i in range(0, 8):
-    print (i)
-    dut.ui_in.value[i] = 1
+    print (n)
+    dut.ui_in.value = n
     await pulse(dut, SC_RESET, SC_GET)
-    dut.ui_in.value[i] = 0
+    await ClockCycles(dut.clk, 3)
     await clear(dut, 0)
+    n = n+n
