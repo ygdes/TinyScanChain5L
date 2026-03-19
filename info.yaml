@@ -51,7 +51,7 @@ pinout:
   uio[4]: "SC_DIN"
   uio[5]: "SC_DOUT"
   uio[6]: ""
-  uio[7]: ""
+  uio[7]: "Count_Enable"
 
 # Do not change!
 yaml_version: 6
