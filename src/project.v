@@ -45,11 +45,31 @@ module tt_um_YannGuidon_TinyScanChain (
   assign uio_out = { 1'b0, DO[8], SC_DOUT, 5'b0 };
   assign uio_oe  = 8'b01100000;
 
-  // The actual "meat" comes here.
-  wire [3:0] Latch;
-  Johnson8 J8( .CLK(SC_CLK), .RESET(SC_RESET), .Latch(Latch) );
 
+  // The actual "meat" comes here.
+
+  // The controller:
+  wire [3:0] L4, Latch;
+  Johnson8 J8( .CLK(SC_CLK), .RESET(SC_RESET), .Latch(L4) );
+  Buffers_x4 b4(.A(L4), .X(Latch));
+  // note: I boost the 4 latch signals, because they are important for timing (at high frequencies)
+  // but let the toolset handle the less demanding SC_SET and SC_GET
+
+  // The scan chain
+  wire [1:0] t0, t1, t2, t3, t4, t5, t6;
+  assign t0={ ~SC_DIN, SC_DIN};
+  SC_Quad_Out QO3(.SET(SC_SET), .Dout(DO[8:6]), .Latch(Latch), .SCin(t0), .SCout(t1));
+  SC_Quad_Out QO2(.SET(SC_SET), .Dout(DO[5:3]), .Latch(Latch), .SCin(t1), .SCout(t2));
+  SC_Quad_Out QO1(.SET(SC_SET), .Dout(DO[2:0]), .Latch(Latch), .SCin(t2), .SCout(t3));
+  wire [2:0] in3;
+  assign in3 = { DO[8], ui_in[7:6] };
+  SC_Quad_In  QI3(.GET(SC_GET), .Din(in3       ), .Latch(Latch), .SCin(t3), .SCout(t4));
+  SC_Quad_In  QI2(.GET(SC_GET), .Din(ui_in[5:3]), .Latch(Latch), .SCin(t4), .SCout(t5));
+  SC_Quad_In  QI1(.GET(SC_GET), .Din(ui_in[2:0]), .Latch(Latch), .SCin(t5), .SCout(t6));
+
+  assign SC_DOUT = t6[0]; // output only the positive value
+  
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+  wire _unused = &{ena, clk, rst_n, t6[1] 1'b0};
 
 endmodule
