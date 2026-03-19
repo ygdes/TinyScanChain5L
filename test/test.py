@@ -81,7 +81,7 @@ async def test_project(dut):
   dut.rst_n.value = 1
   dut.uio_in.value = Count_Enable + SC_SET
   dut._log.info("Let's see if the LFSR works.")
-  await ClockCycles(dut.clk, 50)
+  await ClockCycles(dut.clk, 48)
 
 
   dut.uio_in.value = SC_SET + SC_DIN
