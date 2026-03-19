@@ -52,7 +52,7 @@ async def pulse8(dut, bytes, flags):
   while (j < bytes):
     j = j+1
     i = 0
-    while (i < 8):   # a whole byte
+    while (i < 8):   # a whole byte for SPI, just one bit for the shift register
       i = i+1
       dut.uio_in.value = flags + SC_CLK
       await ClockCycles(dut.clk, 1)
@@ -104,7 +104,7 @@ async def test_project(dut):
   await ClockCycles(dut.clk, 1)
 
   # Flush the chain. Fed with 1, should output 1s after 24 cycles
-  await pulse8(dut, 4, SC_RESET + SC_DIN)
+  await pulse8(dut, 4*8, SC_RESET + SC_DIN)
 
 
 
