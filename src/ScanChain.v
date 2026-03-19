@@ -9,21 +9,19 @@ But it's still fast enough for most debug chores.
 
 /*
   8-step sequencer using an inverted ring counter,
-  aka Johnson counter. 4 DFF, 8 AND,
+  aka Johnson counter. 4 DFF, 4 AND,
   using raw cells from iHP CMOS PDK
 
   In this version, reset forces all outputs to 1 instead of 0
   to flush the shift register very fast.
 
-  area : 10.8864 + 4×54.432 + 8×14.5152 = 344.736
+  area : 10.8864 + 4×54.432 + 4×14.5152 = 286.68
 */
-
 module Johnson8(
-  input  wire CLK,
-  input  wire RESET,
-  output wire [3:0] DFF4,
-  output wire [7:0] Decoded8);
-
+    input  wire CLK,
+    input  wire RESET,
+    output wire [3:0] Latch
+);
   // invert & Boost Reset
   wire rstN;
   (* keep *) sg13g2_inv_4 boost0(.Y(rstN),  .A(RESET));
@@ -34,17 +32,12 @@ module Johnson8(
   (* keep *) sg13g2_dfrbp_2  DFF_J2(.Q(J4P[1]), .Q_N(J4N[1]), .D(J4P[0]), .RESET_B(RESET), .CLK(CLK));
   (* keep *) sg13g2_dfrbp_2  DFF_J3(.Q(J4P[2]), .Q_N(J4N[2]), .D(J4P[1]), .RESET_B(RESET), .CLK(CLK));
   (* keep *) sg13g2_dfrbp_2  DFF_J4(.Q(J4P[3]), .Q_N(J4N[3]), .D(J4P[2]), .RESET_B(RESET), .CLK(CLK));
-  assign DFF4 = J4P;
 
   // The decoder
-  (* keep *) sg13g2_a21o_2 dec0(.X(Decoded8[0]), .A1(J4N[3]), .A2(J4N[0]), .B1(rstN));
-  (* keep *) sg13g2_a21o_2 dec1(.X(Decoded8[1]), .A1(J4P[0]), .A2(J4N[1]), .B1(rstN));
-  (* keep *) sg13g2_a21o_2 dec2(.X(Decoded8[2]), .A1(J4P[1]), .A2(J4N[2]), .B1(rstN));
-  (* keep *) sg13g2_a21o_2 dec3(.X(Decoded8[3]), .A1(J4P[2]), .A2(J4N[3]), .B1(rstN));
-  (* keep *) sg13g2_a21o_2 dec4(.X(Decoded8[4]), .A1(J4P[3]), .A2(J4P[0]), .B1(rstN));
-  (* keep *) sg13g2_a21o_2 dec5(.X(Decoded8[5]), .A1(J4N[0]), .A2(J4P[1]), .B1(rstN));
-  (* keep *) sg13g2_a21o_2 dec6(.X(Decoded8[6]), .A1(J4N[1]), .A2(J4P[2]), .B1(rstN));
-  (* keep *) sg13g2_a21o_2 dec7(.X(Decoded8[7]), .A1(J4N[2]), .A2(J4P[3]), .B1(rstN));
+  (* keep *) sg13g2_a21o_2 dec0(.X(Latch[0]), .A1(J4N[3]), .A2(J4N[0]), .B1(rstN));
+  (* keep *) sg13g2_a21o_2 dec2(.X(Latch[1]), .A1(J4P[1]), .A2(J4N[2]), .B1(rstN));
+  (* keep *) sg13g2_a21o_2 dec4(.X(Latch[2]), .A1(J4P[3]), .A2(J4P[0]), .B1(rstN));
+  (* keep *) sg13g2_a21o_2 dec6(.X(Latch[3]), .A1(J4N[1]), .A2(J4P[2]), .B1(rstN));
 endmodule
 
 
@@ -113,14 +106,44 @@ module SC_RSFF_out(
     input  wire SET,
     output wire Dout,
     output wire DoutN,
-    output wire Q,
-    output wire Q_N);
+    output wire Q);
   // The scan chain:
   (* keep *) sg13g2_a21oi_1 rssc_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Q  ));
   (* keep *) sg13g2_a21oi_1 rssc_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Q_N));
   // The data latch:
+  wire Q_N;
   (* keep *) sg13g2_a21oi_1 rsdo_neg(.Y(DoutN), .A1(GET), .A2(Q  ), .B1(Dout ));
   (* keep *) sg13g2_a21oi_1 rsdo_pos(.Y(Dout ), .A1(GET), .A2(Q_N), .B1(DoutN));
 endmodule
 
 // Note : SC_RFF_inout is possible. But not required here yet so I skip.
+
+module SC_Quad_In(
+    input  wire GET,
+    input  wire [2:0] Din,
+
+    input  wire [3:0] Latch,
+    input  wire [1:0] SCin,
+    output wire [1:0] SCout
+);
+  wire tp1, tp2, tp3, tn1, tn2, tn3;
+  SC_RSFF     tmp(.D(SCin[0]), .D_N(SCin[1]), .EN(Latch[3]), .Q(tp1),      .Q_N(tn1));
+  SC_RSFF_in  in2(.D(tp1),     .D_N(tn1),     .EN(Latch[2]), .Q(tp2),      .Q_N(tn2),      .Din(Din[2]), .GET(GET));
+  SC_RSFF_in  in1(.D(tp2),     .D_N(tn2),     .EN(Latch[1]), .Q(tp3),      .Q_N(tn3),      .Din(Din[1]), .GET(GET));
+  SC_RSFF_in  in0(.D(tp3),     .D_N(tn3),     .EN(Latch[0]), .Q(SCout[0]), .Q_N(SCout[1]), .Din(Din[0]), .GET(GET));
+endmodule
+
+module SC_Quad_Out(
+    input  wire SET,
+    output wire [2:0] Dout,
+
+    input  wire [3:0] Latch,
+    input  wire [1:0] SCin,
+    output wire [1:0] SCout
+);
+  wire tp1, tp2, tp3, tn1, tn2, tn3;
+  SC_RSFF     tmp (.D(SCin[0]), .D_N(SCin[1]), .EN(Latch[3]), .Q(tp1),      .Q_N(tn1));
+  SC_RSFF_out out2(.D(tp1),     .D_N(tn1),     .EN(Latch[2]), .Q(tp2),      .Q_N(tn2),      .Dout(Dout[2]), .SET(SET));
+  SC_RSFF_out out1(.D(tp2),     .D_N(tn2),     .EN(Latch[1]), .Q(tp3),      .Q_N(tn3),      .Dout(Dout[1]), .SET(SET));
+  SC_RSFF_out out0(.D(tp3),     .D_N(tn3),     .EN(Latch[0]), .Q(SCout[0]), .Q_N(SCout[1]), .Dout(Dout[0]), .SET(SET));
+endmodule
