@@ -41,6 +41,10 @@ By comparison:
 
 Note: The scan chain has a granularity of 4 steps but only 3 actual data bits. Clock pulses should always be in bursts of 8, each burst provides one bit, so the bits are grouped by 3. This implies that each transaction will certainly consist of sequences of 3 bytes over SPI.
 
+.
+
+.
+
 ## How to test
 
 The pins are :
