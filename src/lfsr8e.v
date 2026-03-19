@@ -19,7 +19,7 @@ module LFSR8E(
 
   wire dum1, dum2;
   // The actual shit register, that supports "reset to 00000110"
-  (* keep *) sg13g2_sdfrbpq_1 lfsr7(            .Q(LFSR_STATE[7]), .SCD(feedback),      .RESET_B(RESET), .CLK(CLK), .SCE(LFSR_EN), .D(LFSR_STATE[7]));
+  (* keep *) sg13g2_sdfrbpq_1 lfsr7(            .Q(LFSR_STATE[7]), .SCD(LFSR_STATE[0]), .RESET_B(RESET), .CLK(CLK), .SCE(LFSR_EN), .D(LFSR_STATE[7]));
   (* keep *) sg13g2_sdfrbpq_1 lfsr6(            .Q(LFSR_STATE[6]), .SCD(LFSR_STATE[7]), .RESET_B(RESET), .CLK(CLK), .SCE(LFSR_EN), .D(LFSR_STATE[6]));
   (* keep *) sg13g2_sdfrbpq_1 lfsr5(            .Q(LFSR_STATE[5]), .SCD(LFSR_STATE[6]), .RESET_B(RESET), .CLK(CLK), .SCE(LFSR_EN), .D(LFSR_STATE[5]));
   (* keep *) sg13g2_sdfrbpq_1 lfsr4(            .Q(LFSR_STATE[4]), .SCD(x1),            .RESET_B(RESET), .CLK(CLK), .SCE(LFSR_EN), .D(LFSR_STATE[4]));
