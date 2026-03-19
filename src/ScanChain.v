@@ -93,7 +93,6 @@ module SC_RSFF_in(
     input  wire EN,
     output wire Q,
     output wire Q_N);
-  wire DinN;
   (* keep *) sg13g2_a221oi_1 rs_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Din), .B2(GET), .C1(Q));
   (* keep *) sg13g2_a21oi_1  rs_pos(.Y(Q  ), .A1(EN), .A2(D_N),                     .B1(Q_N));
 endmodule
