@@ -64,7 +64,27 @@ async def test_project(dut):
   dut.rst_n.value = 1
   dut.uio_in.value = Count_Enable + SC_SET
   dut._log.info("Let's see if the LFSR works.")
-  await ClockCycles(dut.clk, 100)
+  await ClockCycles(dut.clk, 50)
+
+  dut.uio_in.value = SC_SET + SC_DIN
+  dut._log.info("LFSR stopped. Does the input value cascade to the output during RESET ?")
+  await ClockCycles(dut.clk, 1)
+
+  dut.uio_in.value = SC_SET  # restore the cleared value at the output port)
+  await ClockCycles(dut.clk, 1)
+
+  dut._log.info("Does the scan chain captures the input data ?")
+  dut.uio_in.value = SC_RESET + SC_GET
+  dut.ui_in.value = 109 # 01101101
+  await ClockCycles(dut.clk, 1)
+
+  dut.uio_in.value = SC_RESET
+  await ClockCycles(dut.clk, 1)
+
+  #dut.uio_in.value = Count_Enable + SC_GET
+  #await ClockCycles(dut.clk, 1)
+
+
 
   # Set the input values you want to test
   #dut.ui_in.value = 20
