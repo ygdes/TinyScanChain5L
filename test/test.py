@@ -85,19 +85,19 @@ async def test_project(dut):
   dut.uio_in.value = SC_SET + SC_DIN
   dut._log.info("LFSR stopped. Does the input value cascade to the output during RESET ?")
   await ClockCycles(dut.clk, 1)
-  print("dut.uio_in.value = " + int(dut.uio_in.value))
-  #assert dut.uio_in.value == SC_DOUT + DO8
+  print("dut.uio_out.value = " + str(dut.uio_out.value))
+  #assert dut.uio_out.value == SC_DOUT + DO8
 
   dut.uio_in.value = SC_SET  # restore the cleared value at the output port)
   await ClockCycles(dut.clk, 1)
-  print("dut.uio_in.value = " + int(dut.uio_in.value))
-  #assert dut.uio_in.value == SC_DOUT + DO8
-
+  print("dut.uio_out.value = " + str(dut.uio_out.value))
+  #assert dut.uio_out.value == 0
 
   dut._log.info("Does the scan chain capture the input data ?")
   dut.uio_in.value = SC_RESET + SC_GET
   dut.ui_in.value = 109 # 01101101
   await ClockCycles(dut.clk, 1)
+  # sc_dout should be 1 right ?
 
   dut._log.info("Dumping the scan chain")
   dut.uio_in.value = SC_RESET
