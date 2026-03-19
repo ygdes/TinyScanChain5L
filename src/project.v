@@ -61,24 +61,24 @@ module tt_um_YannGuidon_TinyScanChain (
 
   // The scan chain
   wire [1:0] t0, t1, t2, t3, t4, t5, t6, t7, t8;
-  wire [31:0] S; // spy on this signal to "see" the whole scan chain
+  wire [23:0] S; // spy on this signal to "see" the whole scan chain
 
   assign t0={ ~SC_DIN, SC_DIN}; // yeah I got lazy here
   // output some data
-  SC_Quad_Out QO0(.SET(SC_SET), .Dout(DO[2:0]), .Latch(Latch), .SCin(t0), .SCout(t1), .state_pos(S[3:0]));
-  SC_Quad_Out QO1(.SET(SC_SET), .Dout(DO[5:3]), .Latch(Latch), .SCin(t1), .SCout(t2), .state_pos(S[7:4]));
-  SC_Quad_Out QO2(.SET(SC_SET), .Dout(DO[8:6]), .Latch(Latch), .SCin(t2), .SCout(t3), .state_pos(S[11:8]));
+  SC_Quad_Out QO0(.SET(SC_SET), .Dout(DO[2:0]), .Latch(Latch), .SCin(t0), .SCout(t1), .state_pos(S[2:0]));
+  SC_Quad_Out QO1(.SET(SC_SET), .Dout(DO[5:3]), .Latch(Latch), .SCin(t1), .SCout(t2), .state_pos(S[5:3]));
+  SC_Quad_Out QO2(.SET(SC_SET), .Dout(DO[8:6]), .Latch(Latch), .SCin(t2), .SCout(t3), .state_pos(S[8:6]));
 
   // read some internal data (and ignore the MSB of the LFSR, who cares)
-  SC_Quad_In  QI0(.GET(SC_GET), .Din(SomeData[2:0]), .Latch(Latch), .SCin(t3), .SCout(t4), .state_pos(S[15:12]));
-  SC_Quad_In  QI1(.GET(SC_GET), .Din(SomeData[5:3]), .Latch(Latch), .SCin(t4), .SCout(t5), .state_pos(S[19:16]));
+  SC_Quad_In  QI0(.GET(SC_GET), .Din(SomeData[2:0]), .Latch(Latch), .SCin(t3), .SCout(t4), .state_pos(S[11:9]));
+  SC_Quad_In  QI1(.GET(SC_GET), .Din(SomeData[5:3]), .Latch(Latch), .SCin(t4), .SCout(t5), .state_pos(S[14:12]));
   
   // input some external data
   wire [2:0] in3;
   assign in3 = { ui_in[1:0], SomeData[6] };
-  SC_Quad_In  QI2(.GET(SC_GET), .Din(in3       ), .Latch(Latch), .SCin(t5), .SCout(t6), .state_pos(S[23:20]));
-  SC_Quad_In  QI3(.GET(SC_GET), .Din(ui_in[4:2]), .Latch(Latch), .SCin(t6), .SCout(t7), .state_pos(S[27:24]));
-  SC_Quad_In  QI4(.GET(SC_GET), .Din(ui_in[7:5]), .Latch(Latch), .SCin(t7), .SCout(t8), .state_pos(S[31:28]));
+  SC_Quad_In  QI2(.GET(SC_GET), .Din(in3       ), .Latch(Latch), .SCin(t5), .SCout(t6), .state_pos(S[17:15]));
+  SC_Quad_In  QI3(.GET(SC_GET), .Din(ui_in[4:2]), .Latch(Latch), .SCin(t6), .SCout(t7), .state_pos(S[20:18]));
+  SC_Quad_In  QI4(.GET(SC_GET), .Din(ui_in[7:5]), .Latch(Latch), .SCin(t7), .SCout(t8), .state_pos(S[23:21]));
 
   assign SC_DOUT = t8[0]; // output only the positive value
   
