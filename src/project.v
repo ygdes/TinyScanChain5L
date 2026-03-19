@@ -61,26 +61,28 @@ module tt_um_YannGuidon_TinyScanChain (
 
   // The scan chain
   wire [1:0] t0, t1, t2, t3, t4, t5, t6, t7, t8;
-  assign t0={ ~SC_DIN, SC_DIN};
+  wire [31:0] S;
+
+  assign t0={ ~SC_DIN, SC_DIN}; // yeah I got lazy here
   // output some data
-  SC_Quad_Out QO3(.SET(SC_SET), .Dout(DO[8:6]), .Latch(Latch), .SCin(t0), .SCout(t1));
-  SC_Quad_Out QO2(.SET(SC_SET), .Dout(DO[5:3]), .Latch(Latch), .SCin(t1), .SCout(t2));
-  SC_Quad_Out QO1(.SET(SC_SET), .Dout(DO[2:0]), .Latch(Latch), .SCin(t2), .SCout(t3));
+  SC_Quad_Out QO3(.SET(SC_SET), .Dout(DO[8:6]), .Latch(Latch), .SCin(t0), .SCout(t1), .state_pos(S[3:0]));
+  SC_Quad_Out QO2(.SET(SC_SET), .Dout(DO[5:3]), .Latch(Latch), .SCin(t1), .SCout(t2), .state_pos(S[7:4]));
+  SC_Quad_Out QO1(.SET(SC_SET), .Dout(DO[2:0]), .Latch(Latch), .SCin(t2), .SCout(t3), .state_pos(S[11:8]));
 
   // read some internal data (and ignore the MSB of the LFSR, who cares)
-  SC_Quad_In  QI5(.GET(SC_GET), .Din(SomeData[6:4]), .Latch(Latch), .SCin(t3), .SCout(t4));
-  SC_Quad_In  QI4(.GET(SC_GET), .Din(SomeData[3:1]), .Latch(Latch), .SCin(t4), .SCout(t5));
+  SC_Quad_In  QI5(.GET(SC_GET), .Din(SomeData[6:4]), .Latch(Latch), .SCin(t3), .SCout(t4), .state_pos(S[15:12]));
+  SC_Quad_In  QI4(.GET(SC_GET), .Din(SomeData[3:1]), .Latch(Latch), .SCin(t4), .SCout(t5), .state_pos(S[19:16]));
   
   // input some external data
   wire [2:0] in3;
   assign in3 = { SomeData[0], ui_in[7:6] };
-  SC_Quad_In  QI3(.GET(SC_GET), .Din(in3       ), .Latch(Latch), .SCin(t5), .SCout(t6));
-  SC_Quad_In  QI2(.GET(SC_GET), .Din(ui_in[5:3]), .Latch(Latch), .SCin(t6), .SCout(t7));
-  SC_Quad_In  QI1(.GET(SC_GET), .Din(ui_in[2:0]), .Latch(Latch), .SCin(t7), .SCout(t8));
+  SC_Quad_In  QI3(.GET(SC_GET), .Din(in3       ), .Latch(Latch), .SCin(t5), .SCout(t6), .state_pos(S[23:20]));
+  SC_Quad_In  QI2(.GET(SC_GET), .Din(ui_in[5:3]), .Latch(Latch), .SCin(t6), .SCout(t7), .state_pos(S[27:24]));
+  SC_Quad_In  QI1(.GET(SC_GET), .Din(ui_in[2:0]), .Latch(Latch), .SCin(t7), .SCout(t8), .state_pos(S[31:28]));
 
   assign SC_DOUT = t8[0]; // output only the positive value
   
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, SomeData[7], t8[1], uio_in[5], uio_in[6], 1'b0};
+  wire _unused = &{ena, SomeData[7], t8[1], uio_in[5], uio_in[6], S, 1'b0};
 
 endmodule
