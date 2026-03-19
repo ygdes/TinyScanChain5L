@@ -97,7 +97,7 @@ module SC_RSFF_in(
 endmodule
 
 /* This is an "output" cell, that stores a bit from the scan chain for external use.
-   area : 4 × 9.072 = 36.288
+   area : 4 x 9.072 = 36.288
 */
 module SC_RSFF_out(
     input  wire D,
