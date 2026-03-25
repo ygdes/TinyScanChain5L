@@ -6,7 +6,7 @@ Let's try some new ideas in real silicon, so I can restart the project [DTAP - D
 
 [Read the documentation for this project](docs/info.md)
 
-[https://app.tinytapeout.com/projects/4049](You can play with this project on the iHP26a tapeout at address 625)
+[You can play with this project on the iHP26a tapeout at address 625](https://app.tinytapeout.com/projects/4049)
 
 ## What is this Tiny Tapeout tile ?
 
