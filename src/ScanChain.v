@@ -24,20 +24,20 @@ module Johnson8(
 );
   // invert & Boost Reset
   wire rstN;
-  (* keep *) sg13g2_inv_4 boost0(.Y(rstN),  .A(RESET));
+  (* keep *) sg13cmos5l_inv_4 boost0(.Y(rstN),  .A(RESET));
 
   // The ring counter
   wire [3:0] J4P, J4N;
-  (* keep *) sg13g2_dfrbp_2  DFF_J1(.Q(J4P[0]), .Q_N(J4N[0]), .D(J4N[3]), .RESET_B(RESET), .CLK(CLK));
-  (* keep *) sg13g2_dfrbp_2  DFF_J2(.Q(J4P[1]), .Q_N(J4N[1]), .D(J4P[0]), .RESET_B(RESET), .CLK(CLK));
-  (* keep *) sg13g2_dfrbp_2  DFF_J3(.Q(J4P[2]), .Q_N(J4N[2]), .D(J4P[1]), .RESET_B(RESET), .CLK(CLK));
-  (* keep *) sg13g2_dfrbp_2  DFF_J4(.Q(J4P[3]), .Q_N(J4N[3]), .D(J4P[2]), .RESET_B(RESET), .CLK(CLK));
+  (* keep *) sg13cmos5l_dfrbp_2  DFF_J1(.Q(J4P[0]), .Q_N(J4N[0]), .D(J4N[3]), .RESET_B(RESET), .CLK(CLK));
+  (* keep *) sg13cmos5l_dfrbp_2  DFF_J2(.Q(J4P[1]), .Q_N(J4N[1]), .D(J4P[0]), .RESET_B(RESET), .CLK(CLK));
+  (* keep *) sg13cmos5l_dfrbp_2  DFF_J3(.Q(J4P[2]), .Q_N(J4N[2]), .D(J4P[1]), .RESET_B(RESET), .CLK(CLK));
+  (* keep *) sg13cmos5l_dfrbp_2  DFF_J4(.Q(J4P[3]), .Q_N(J4N[3]), .D(J4P[2]), .RESET_B(RESET), .CLK(CLK));
 
   // The decoder
-  (* keep *) sg13g2_a21o_2 dec0(.X(Latch[0]), .A1(J4N[3]), .A2(J4N[0]), .B1(rstN));
-  (* keep *) sg13g2_a21o_2 dec2(.X(Latch[1]), .A1(J4P[1]), .A2(J4N[2]), .B1(rstN));
-  (* keep *) sg13g2_a21o_2 dec4(.X(Latch[2]), .A1(J4P[3]), .A2(J4P[0]), .B1(rstN));
-  (* keep *) sg13g2_a21o_2 dec6(.X(Latch[3]), .A1(J4N[1]), .A2(J4P[2]), .B1(rstN));
+  (* keep *) sg13cmos5l_a21o_2 dec0(.X(Latch[0]), .A1(J4N[3]), .A2(J4N[0]), .B1(rstN));
+  (* keep *) sg13cmos5l_a21o_2 dec2(.X(Latch[1]), .A1(J4P[1]), .A2(J4N[2]), .B1(rstN));
+  (* keep *) sg13cmos5l_a21o_2 dec4(.X(Latch[2]), .A1(J4P[3]), .A2(J4P[0]), .B1(rstN));
+  (* keep *) sg13cmos5l_a21o_2 dec6(.X(Latch[3]), .A1(J4N[1]), .A2(J4P[2]), .B1(rstN));
 endmodule
 
 
@@ -48,10 +48,10 @@ endmodule
 module Inverters_x4 (
     input  wire [3:0] A,
     output wire [3:0] Y);
-  (* keep *) sg13g2_inv_4  Amp0(.Y(Y[0]), .A(A[0]));
-  (* keep *) sg13g2_inv_4  Amp1(.Y(Y[1]), .A(A[1]));
-  (* keep *) sg13g2_inv_4  Amp2(.Y(Y[2]), .A(A[2]));
-  (* keep *) sg13g2_inv_4  Amp3(.Y(Y[3]), .A(A[3]));
+  (* keep *) sg13cmos5l_inv_4  Amp0(.Y(Y[0]), .A(A[0]));
+  (* keep *) sg13cmos5l_inv_4  Amp1(.Y(Y[1]), .A(A[1]));
+  (* keep *) sg13cmos5l_inv_4  Amp2(.Y(Y[2]), .A(A[2]));
+  (* keep *) sg13cmos5l_inv_4  Amp3(.Y(Y[3]), .A(A[3]));
 endmodule
 
 /*
@@ -61,10 +61,10 @@ endmodule
 module Buffers_x4 (
     input  wire [3:0] A,
     output wire [3:0] X);
-  (* keep *) sg13g2_buf_4  Amp0(.X(X[0]), .A(A[0]));
-  (* keep *) sg13g2_buf_4  Amp1(.X(X[1]), .A(A[1]));
-  (* keep *) sg13g2_buf_4  Amp2(.X(X[2]), .A(A[2]));
-  (* keep *) sg13g2_buf_4  Amp3(.X(X[3]), .A(A[3]));
+  (* keep *) sg13cmos5l_buf_4  Amp0(.X(X[0]), .A(A[0]));
+  (* keep *) sg13cmos5l_buf_4  Amp1(.X(X[1]), .A(A[1]));
+  (* keep *) sg13cmos5l_buf_4  Amp2(.X(X[2]), .A(A[2]));
+  (* keep *) sg13cmos5l_buf_4  Amp3(.X(X[3]), .A(A[3]));
 endmodule
 
 
@@ -77,8 +77,8 @@ module SC_RSFF(
     input  wire EN,
     output wire Q,
     output wire Q_N);
-  (* keep *) sg13g2_a21oi_1 rs_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Q  ));
-  (* keep *) sg13g2_a21oi_1 rs_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Q_N));
+  (* keep *) sg13cmos5l_a21oi_1 rs_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Q  ));
+  (* keep *) sg13cmos5l_a21oi_1 rs_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Q_N));
 endmodule
 
 /* This is an "input" cell, used by the 3 other slots of a quad.
@@ -93,8 +93,8 @@ module SC_RSFF_in(
     input  wire EN,
     output wire Q,
     output wire Q_N);
-  (* keep *) sg13g2_a221oi_1 rs_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Din), .B2(GET), .C1(Q));
-  (* keep *) sg13g2_a21oi_1  rs_pos(.Y(Q  ), .A1(EN), .A2(D_N),                     .B1(Q_N));
+  (* keep *) sg13cmos5l_a221oi_1 rs_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Din), .B2(GET), .C1(Q));
+  (* keep *) sg13cmos5l_a21oi_1  rs_pos(.Y(Q  ), .A1(EN), .A2(D_N),                     .B1(Q_N));
 endmodule
 
 /* This is an "output" cell, that stores a bit from the scan chain for external use.
@@ -109,12 +109,12 @@ module SC_RSFF_out(
     output wire Q,
     output wire Q_N);
   // The scan chain:
-  (* keep *) sg13g2_a21oi_1 rssc_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Q  ));
-  (* keep *) sg13g2_a21oi_1 rssc_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Q_N));
+  (* keep *) sg13cmos5l_a21oi_1 rssc_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Q  ));
+  (* keep *) sg13cmos5l_a21oi_1 rssc_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Q_N));
   // The data latch:
   wire DoutN;
-  (* keep *) sg13g2_a21oi_1 rsdo_neg(.Y(DoutN), .A1(SET), .A2(Q  ), .B1(Dout ));
-  (* keep *) sg13g2_a21oi_1 rsdo_pos(.Y(Dout ), .A1(SET), .A2(Q_N), .B1(DoutN));
+  (* keep *) sg13cmos5l_a21oi_1 rsdo_neg(.Y(DoutN), .A1(SET), .A2(Q  ), .B1(Dout ));
+  (* keep *) sg13cmos5l_a21oi_1 rsdo_pos(.Y(Dout ), .A1(SET), .A2(Q_N), .B1(DoutN));
 endmodule
 
 // Note : SC_RFF_inout is possible. But not required here yet so I skip.
