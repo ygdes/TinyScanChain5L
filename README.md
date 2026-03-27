@@ -1,5 +1,7 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
+This is a port from iHP's SG13G2 to the feature-reduced SG13CMOS5L PDK.
+
 # Welcome to the TinyScanChain
 
 Let's try some new ideas in real silicon, so I can restart the project [DTAP - Debug and Test Access Port](https://hackaday.io/project/193122-dtap-debug-and-test-access-port)
