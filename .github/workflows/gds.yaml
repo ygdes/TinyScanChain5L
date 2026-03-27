@@ -16,7 +16,7 @@ jobs:
       - name: Build GDS
         uses: TinyTapeout/tt-gds-action@ihp-cmos5l
         with:
-          pdk: ihp-ihp-cmos5l
+          pdk: ihp-sg13cmos5l
 
   precheck:
     needs: gds
