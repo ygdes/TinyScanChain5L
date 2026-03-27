@@ -1,6 +1,6 @@
 # Welcome to the TinyScanChain
 
-It's "just a quick, last-day FOMO" project where I try some new ideas in real silicon, so I can restart the project "DTAP - Debug and Test Access Port" (see [https://hackaday.io/project/193122-dtap-debug-and-test-access-port](https://hackaday.io/project/193122-dtap-debug-and-test-access-port) )
+This is a port of [https://github.com/YannGuidon/TinyScanChain](https://github.com/YannGuidon/TinyScanChain) to IHP SG13CMOS5L PDK, before I restart [https://hackaday.io/project/193122-dtap-debug-and-test-access-port](https://hackaday.io/project/193122-dtap-debug-and-test-access-port) )
 
 ## What is this Tiny Tapeout tile ?
 
