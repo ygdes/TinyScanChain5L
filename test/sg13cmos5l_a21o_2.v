@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 `celldefine
-module sg13mos5l_a21o_2 (X, A1, A2, B1);
+module sg13cmos5l_a21o_2 (X, A1, A2, B1);
 	output X;
 	input A1, A2, B1;
 	wire int_fwire_0;
