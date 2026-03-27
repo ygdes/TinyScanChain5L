@@ -1,6 +1,6 @@
 # Welcome to the TinyScanChain
 
-This is a port of [https://github.com/YannGuidon/TinyScanChain](https://github.com/YannGuidon/TinyScanChain) to IHP SG13CMOS5L PDK, before I restart [https://hackaday.io/project/193122-dtap-debug-and-test-access-port](https://hackaday.io/project/193122-dtap-debug-and-test-access-port) )
+This is a port of the project [https://github.com/YannGuidon/TinyScanChain](https://github.com/YannGuidon/TinyScanChain) to IHP SG13CMOS5L PDK, before I restart the DTAP interface project (see [https://hackaday.io/project/193122-dtap-debug-and-test-access-port](https://hackaday.io/project/193122-dtap-debug-and-test-access-port) )
 
 ## What is this Tiny Tapeout tile ?
 
@@ -19,7 +19,6 @@ The iHP SG13G2 PDK provides A221OI and A21OI gates which solve this problem. It'
 
 These projects have shown that an iHP tile could be filled with more than 1K Reset-Set latches, though the synthesiser and the place&route tools do not cooperate, reducing the rated speed to about 20MHz, whatever this means, since the clock is internally sped down by 8. Still, 1M bits per second is enough for a comfy debug session. However this should not affect the DUT's performance and it's now a matter of coercing the tools to de-prioritise the scan chain, and learn other tricks.
 
-.
 
 ## How it works
 
