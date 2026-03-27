@@ -1,6 +1,6 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-This is a port from iHP's SG13G2 to the feature-reduced SG13CMOS5L PDK.
+This is a port to the feature-reduced SG13CMOS5L PDK. The original project for the full-featured SG13G2 PDK is at [https://github.com/YannGuidon/TinyScanChain](https://github.com/YannGuidon/TinyScanChain). But basically, the design is not affected, the project checks how to reconfigure an existing one.
 
 # Welcome to the TinyScanChain
 
